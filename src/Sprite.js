@@ -1,7 +1,7 @@
 import { Vector2 } from './Vector2.js';
 
 export class Sprite {
-    constructor({ resource, frameSize, hFrame, vFrame, frame, scale, position }) {
+    constructor({ resource, frameSize, hFrame, vFrame, frame, scale, position, animations }) {
         this.resource = resource;
         this.frameSize = frameSize ?? new Vector2(16, 16);
         this.hFrame = hFrame ?? 1;
@@ -11,6 +11,7 @@ export class Sprite {
         this.scale = scale ?? 1;
         this.position = position ?? new Vector2(0, 0);
         this.buildFrameMap();
+        this.animations = animations ?? null;
     }
 
     buildFrameMap() {
@@ -24,6 +25,12 @@ export class Sprite {
                 frameCount++;
             }
         }
+    }
+
+    step(delta) {
+        if (!this.animations) return;
+        this.animations.step(delta);
+        this.frame = this.animations.frame;
     }
 
     drawImage(ctx, x, y) {
